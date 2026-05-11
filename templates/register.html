@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Register Face{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Register New Face</h1>
+    <p class="page-subtitle">Add a person to the recognition database</p>
+</div>
+
+<div class="glass-card form-card">
+    <form method="POST" enctype="multipart/form-data" id="register-form">
+        <!-- Name Input -->
+        <div class="form-group">
+            <label for="name" class="form-label">Person's Name</label>
+            <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                class="form-input" 
+                placeholder="Enter full name..." 
+                required 
+                autocomplete="off"
+            >
+        </div>
+
+        <!-- Photo Upload -->
+        <div class="form-group">
+            <label class="form-label">Photo</label>
+            <div class="upload-zone" id="upload-zone">
+                <input 
+                    type="file" 
+                    id="photo" 
+                    name="photo" 
+                    accept="image/*" 
+                    class="upload-input"
+                    required
+                >
+                <div class="upload-content" id="upload-content">
+                    <div class="upload-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                    </div>
+                    <p class="upload-text">Drag & drop a photo here</p>
+                    <p class="upload-hint">or click to browse · JPG, PNG, WebP · Max 16MB</p>
+                </div>
+                <div class="upload-preview" id="upload-preview" style="display: none;">
+                    <img id="preview-image" alt="Preview">
+                    <button type="button" class="preview-remove" id="preview-remove" aria-label="Remove image">✕</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="tips-box">
+            <div class="tips-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span>Tips for best results</span>
+            </div>
+            <ul class="tips-list">
+                <li>Use a clear, well-lit photo</li>
+                <li>Face should be clearly visible and front-facing</li>
+                <li>Only one person should be in the photo</li>
+                <li>Avoid sunglasses or heavy face coverings</li>
+            </ul>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-primary btn-full" id="register-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <line x1="19" y1="8" x2="19" y2="14"/>
+                <line x1="22" y1="11" x2="16" y2="11"/>
+            </svg>
+            <span>Register Face</span>
+        </button>
+    </form>
+</div>
+{% endblock %}

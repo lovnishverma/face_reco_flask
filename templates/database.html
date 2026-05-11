@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Face Database{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Face Database</h1>
+    <p class="page-subtitle">Manage registered faces</p>
+</div>
+
+{% if people %}
+<!-- Search -->
+<div class="search-bar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="text" id="search-input" placeholder="Search by name..." class="search-input" autocomplete="off">
+</div>
+
+<!-- People Grid -->
+<div class="people-grid" id="people-grid">
+    {% for name, person in people.items() %}
+    <div class="person-card" data-name="{{ person.name | lower }}">
+        <div class="person-photo-container">
+            {% if person.photo %}
+            <img src="{{ person.photo }}" alt="{{ person.name }}" class="person-photo">
+            {% else %}
+            <div class="person-photo-placeholder">
+                {{ person.name[0] | upper }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="person-info">
+            <h3 class="person-name">{{ person.name }}</h3>
+            <span class="person-meta">{{ person.encoding_count }} encoding{{ 's' if person.encoding_count != 1 }}</span>
+        </div>
+        <form method="POST" action="{{ url_for('delete', name=person.name) }}" class="person-actions"
+              onsubmit="return confirm('Are you sure you want to delete {{ person.name }}? This cannot be undone.');">
+            <button type="submit" class="btn btn-ghost btn-sm btn-danger-text" aria-label="Delete {{ person.name }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                    <line x1="10" y1="11" x2="10" y2="17"/>
+                    <line x1="14" y1="11" x2="14" y2="17"/>
+                </svg>
+                <span>Delete</span>
+            </button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<!-- Empty State -->
+<div class="glass-card empty-state">
+    <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <line x1="19" y1="8" x2="19" y2="14"/>
+            <line x1="22" y1="11" x2="16" y2="11"/>
+        </svg>
+    </div>
+    <h3>No faces registered yet</h3>
+    <p>Start by registering your first face to build the database.</p>
+    <a href="{{ url_for('register') }}" class="btn btn-primary">
+        Register First Face
+    </a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            document.querySelectorAll('.person-card').forEach(card => {
+                const name = card.dataset.name;
+                card.style.display = name.includes(query) ? '' : 'none';
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

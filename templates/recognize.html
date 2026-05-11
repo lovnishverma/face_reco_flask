@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Recognize Faces{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Recognize Faces</h1>
+    <p class="page-subtitle">Upload an image to identify faces</p>
+</div>
+
+<!-- Upload Form -->
+<div class="glass-card form-card">
+    <form method="POST" enctype="multipart/form-data" id="recognize-form">
+        <div class="form-group">
+            <div class="upload-zone" id="upload-zone">
+                <input 
+                    type="file" 
+                    id="photo" 
+                    name="photo" 
+                    accept="image/*" 
+                    class="upload-input"
+                    required
+                >
+                <div class="upload-content" id="upload-content">
+                    <div class="upload-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                    </div>
+                    <p class="upload-text">Drop an image to scan for faces</p>
+                    <p class="upload-hint">or click to browse · JPG, PNG, WebP · Max 16MB</p>
+                </div>
+                <div class="upload-preview" id="upload-preview" style="display: none;">
+                    <img id="preview-image" alt="Preview">
+                    <button type="button" class="preview-remove" id="preview-remove" aria-label="Remove image">✕</button>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="recognize-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <span>Scan for Faces</span>
+        </button>
+    </form>
+</div>
+
+<!-- Results -->
+{% if results is not none %}
+<div class="section-header">
+    <h2>Results</h2>
+    <span class="badge">{{ results | length }} face{{ 's' if results | length != 1 }} found</span>
+</div>
+
+{% if result_image %}
+<div class="glass-card">
+    <div class="result-image-container">
+        <img src="{{ url_for('result_image', filename=result_image) }}" alt="Recognition result" class="result-image">
+    </div>
+</div>
+{% endif %}
+
+{% if results | length > 0 %}
+<div class="results-grid">
+    {% for face in results %}
+    <div class="result-card {% if face.name != 'Unknown' %}result-match{% else %}result-unknown{% endif %}">
+        <div class="result-header">
+            <div class="result-avatar {% if face.name != 'Unknown' %}avatar-match{% else %}avatar-unknown{% endif %}">
+                {{ face.name[0] | upper }}
+            </div>
+            <div>
+                <h3 class="result-name">{{ face.name }}</h3>
+                <span class="result-status">
+                    {% if face.name != 'Unknown' %}Identified{% else %}Not recognized{% endif %}
+                </span>
+            </div>
+        </div>
+        {% if face.name != 'Unknown' %}
+        <div class="confidence-bar-container">
+            <div class="confidence-label">
+                <span>Confidence</span>
+                <span class="confidence-value">{{ face.confidence }}%</span>
+            </div>
+            <div class="confidence-bar">
+                <div class="confidence-fill" style="--target-width: {{ face.confidence }}%"></div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="glass-card empty-state">
+    <p>No faces detected in the image.</p>
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}
