@@ -39,7 +39,7 @@ A complete face recognition system built with **Flask** and **Python**, featurin
 ## 📁 Project Structure
 
 ```
-face_reco/
+face_reco_flask/
 ├── app.py                  # Flask server + all routes
 ├── face_utils.py           # Face encoding, recognition & webcam engine
 ├── requirements.txt        # Python dependencies
@@ -77,8 +77,8 @@ face_reco/
 1. **Clone the repository**
 
    ```bash
-   git clone <your-repo-url>
-   cd face_reco
+   git clone https://github.com/lovnishverma/face_reco_flask.git
+   cd face_reco_flask
    ```
 
 2. **Create a virtual environment** (recommended)
